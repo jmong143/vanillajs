@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <button id = "btnGetData">Get Data from API </button>
+    <div id="content"></div>
+    <hr/>
+    <form action="javascript:void(0)" id = "formNewData">
+      
+      <h3>Sample form</h3>
+      <input type="text" id = "txtTitle" placeholder="Title"/>
+      <input type="text" id = "txtAuthor" placeholder="Author"/>
+      <input type="text" id = "txtYear" placeholder="Year"/>
+      <input type="text" id = "txtPage" placeholder="Page"/>
+      <button type = "submit">Submit</button>
+    </form>
+<script>
+  function samplePromise(method, url){
+    return new Promise(function(resolve, reject){
+      var xhr = new XMLHttpRequest();
+        xhr.open(method, url)
+        xhr.onload = function(){
+          if(this.status == 200){
+           resolve(this.response)
+          }else{
+            reject({message: "failed"})
+          }
+        }
+
+        xhr.onerror = function(err){
+          console.log(err)
+        }
+
+        xhr.send();
+    })
+  }
+  document.getElementById('btnGetData').addEventListener('click', function(){
+    samplePromise('GET', 'http://13.228.72.199:5000/order').then(function(response){
+      var sampleResponse = JSON.parse(response);
+      var output = '';
+    var data = sampleResponse.data
+            for(var result of sampleResponse.data){
+              output += `<p>Id: ${result._id}</p>`
+            }
+      document.getElementById('content').innerHTML = output
+    });
+
+    /*
+    
+    */
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+  document.getElementById('formNewData').addEventListener('submit', samplePost);
+function samplePost(e){
+  var title = document.getElementById('txtTitle').value,
+        author = document.getElementById('txtAuthor').value,
+        year = document.getElementById('txtYear').value,
+        page = document.getElementById('txtPage').value,
+        formData = {title: title, author: author, year: year, pages: page},
+        sample = "title="+title;
+
+
+        var xhr = new XMLHttpRequest();
+xhr.open("POST", 'http://localhost:3000/book', true);
+
+//Send the proper header information along with the request
+xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+xhr.onreadystatechange = function() {//Call a function when the state changes.
+    if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+        // Request finished. Do processing here.
+    }
+}
+xhr.send("order_confirmation_no=123"); 
+
+
+        /*var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:3000/book')
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+        // httpReq.setRequestHeader('Content-type', 'application/ecmascript');
+        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+        xhr.onload = function(){
+          if(this.status == 200){
+            console.log(this.response)
+          }else{
+          }
+        }
+        xhr.onerror = function(){
+        }
+        xhr.send(formData);*/
+};
+   
+</script>
+
+  </body>
+</html>
